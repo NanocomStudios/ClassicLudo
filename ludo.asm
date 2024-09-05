@@ -198,14 +198,31 @@ checkMove:
 	add $t1, $t1, $t0
 	
 	lw $t1, ($t1)
-	li $t0, dice
-	li $t2, 0
-	bne $t1, $t2, checkMove_else_1
-	li $t2, 6
-	bne $t0, $t1, checkMove_else_1
+	bne $t1, 0, checkMove_else_1
+	lw $t0, dice
+	bne $t0, 6, checkMove_else_1
 	li $v0, 1
 	jr $ra
 	
 	checkMove_else_1:
+	bne $t1, 2, checkMove_else_2
+	la $t3, piece.map
+	mul $t0, $t0, 4
+	add $t3, $t3, $t0
 	
+	lw $t3, ($t3)
+	lw $t0, dice
+	add $t3, $t3, $t0
+	bgt $t3, 6, checkMove_else_2
 	
+	li $v0, 1
+	jr $ra
+	
+	checkMove_else_2:
+	bne $t1, 1, checkMove_else_3
+	li $v0, 1
+	jr $ra
+	
+	checkMove_else_3:
+	li $v0, 0
+	jr $ra
